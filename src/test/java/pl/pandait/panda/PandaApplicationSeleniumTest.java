@@ -1,46 +1,51 @@
 package pl.pandait.panda;
 
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
 
 import static org.junit.Assert.assertEquals;
 
 public class PandaApplicationSeleniumTest {
-    private static WebDriver driver;
+
+    private  static WebDriver driver;
 
     @BeforeAll
     public static void startup() throws InterruptedException {
+
         //Driver znajduje się w resource
-        System.setProperty("webdriver.gecko.driver", "src/resources/geckodriver");
+        System.setProperty("webdriver.gecko.driver", "src/main/resources/geckodriver");
         //Ścieżka do Firefoxa - jeżeli nie działa trzeba sprawdzić, gdzie FF jest zainstalowany!
-        System.setProperty("webdriver.firefox.bin", "/usr/bin/firefox");
-        FirefoxOptions capabilities = new FirefoxOptions();
-        capabilities.setCapability("marionette", true);
+        System.setProperty("webdriver.firefox.bin", "/usr/lib/firefox/firefox");
 
         // Tworzymy nową instancję Firefoxa
-        driver = new FirefoxDriver(capabilities);
-        // Otwieramy stronę
+        driver = new FirefoxDriver();
+
         // Pamiętaj, że aplikacja Spring musi działać! To znaczy też musi być włączona.
         driver.get("http://localhost:8080/");
-        // Wyświetlamy informacje, że udało się otwozyć stronę
-        System.out.println("Successfully opened the website");
+
         //Czekamy 2 sekundy
         Thread.sleep(2000);
     }
 
     @Test
-    public void checkIfApplicationRunCorrectly(){
+    public void greetings_shouldOpenMainPageThenReturnWelcomeText() {
         System.out.println("Uruchamiam test 1: Sprawdzenie napisu na stronie głównej");
-        WebElement greetingString = driver.findElement(By.xpath("//p"));
-        String napis = greetingString.getText().trim();
-        assertEquals("Get your greeting here", napis);
+        WebElement greetingElement = driver.findElement(By.xpath("//p"));
+        String greetingText = greetingElement.getText().trim();
+        assertEquals("Get your greeting here", greetingText);
+    }
 
-        WebElement linkToGreetings = greetingString.findElement(By.xpath("./a"));
+    @Test
+    public void greetings_shouldOpenSubpageThenReturnGreetingsText() {
+        System.out.println("Uruchamiam test 2: Sprawdzenie napisu na podstronie");
+        WebElement greetingElement = driver.findElement(By.xpath("//p"));
+        WebElement linkToGreetings = greetingElement.findElement(By.xpath("./a"));
         linkToGreetings.click();
 
         WebElement helloWorldString = driver.findElement(By.xpath("//p"));
@@ -48,8 +53,9 @@ public class PandaApplicationSeleniumTest {
         assertEquals("Hello, World!", newPageString);
     }
 
+
     @AfterAll
-    public static void after(){
-        driver.quit();
+    public static void after() {
+        driver.close();
     }
 }
