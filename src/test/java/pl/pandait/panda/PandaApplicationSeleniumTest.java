@@ -1,22 +1,29 @@
 package pl.pandait.panda;
 
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 
 import static org.junit.Assert.assertEquals;
 
+
+@SpringBootTest(classes = {PandaApplication.class}, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class PandaApplicationSeleniumTest {
 
-    private  static WebDriver driver;
+    private static WebDriver driver;
 
-    @BeforeAll
-    public static void startup() throws InterruptedException {
+    @LocalServerPort
+    private int port;
+
+    @BeforeEach
+    public void startup() throws InterruptedException {
 
         //Driver znajduje się w resource
         System.setProperty("webdriver.gecko.driver", "src/main/resources/geckodriver");
@@ -27,7 +34,7 @@ public class PandaApplicationSeleniumTest {
         driver = new FirefoxDriver();
 
         // Pamiętaj, że aplikacja Spring musi działać! To znaczy też musi być włączona.
-        driver.get("http://localhost:8080/");
+        driver.get(String.format("http://localhost:%d/", port));
 
         //Czekamy 2 sekundy
         Thread.sleep(2000);
@@ -54,8 +61,8 @@ public class PandaApplicationSeleniumTest {
     }
 
 
-    @AfterAll
-    public static void after() {
+    @AfterEach
+    public void after() {
         driver.close();
     }
 }
