@@ -8,6 +8,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
@@ -31,10 +32,12 @@ public class PandaApplicationSeleniumTest {
         System.setProperty("webdriver.firefox.bin", "/usr/lib/firefox/firefox");
 
         // Tworzymy nową instancję Firefoxa
-        driver = new FirefoxDriver();
+        FirefoxOptions options = new FirefoxOptions();
+        options.addArguments("--headless");
+        driver = new FirefoxDriver(options);
 
         // Pamiętaj, że aplikacja Spring musi działać! To znaczy też musi być włączona.
-        driver.get(String.format("http://localhost:%d/", port));
+        driver.get(String.format("http://192.168.44.44:%d/", port));
 
         //Czekamy 2 sekundy
         Thread.sleep(2000);
