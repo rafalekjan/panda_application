@@ -14,12 +14,6 @@
   <version>0.0.2-SNAPSHOT</version>
   <name>panda</name>
   <description>Demo project for Spring Boot</description>
-  <distributionManagement>
-    <repository>
-      <id>ftp-repository</id>
-      <url>ftp://ftp.net4you.net/repository</url>
-    </repository>
-  </distributionManagement>
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
