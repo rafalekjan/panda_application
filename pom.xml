@@ -163,9 +163,8 @@
       </build>
     </profile>
   </profiles>
-</project>
-
-   <distributionManagement>
+  
+ <distributionManagement>
       <repository>
         <id>artifactory</id>
         <name>release</name>
@@ -178,5 +177,4 @@
       </snapshotRepository>
     </distributionManagement>
 
-  
 </project>
