@@ -5,10 +5,12 @@ pipeline {
     tools {
         // Install the Maven version configured as "M3" and add it to the path.
         maven "M3"
+        terraform 'Terraform'
     }
     environment {
         IMAGE = readMavenPom().getArtifactId()
         VERSION = readMavenPom().getVersion()
+        ANSIBLE = tool name: 'Ansible', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
     }
   
     stages {
@@ -56,6 +58,21 @@ pipeline {
                     sh 'docker stop pandaapp'
                     deleteDir()
                 }
+            }
+        }
+        stage('Run terraform') {
+            steps {
+                sh 'terraform init && terraform apply -auto-approve'
+            } 
+        }
+        stage('Deploy Ansible role') {
+            steps {
+                sh 'cp -r infrastructure/ansible/panda/ /etc/ansible/roles/'
+            }
+        }
+        stage('Run Ansible') {
+            steps {
+                sh 'ansible-playbook -i ./inventory playbook.yml'
             }
         }
     }
