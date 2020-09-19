@@ -69,6 +69,7 @@ pipeline {
         stage('Run Ansible') {
                steps {
                 dir('infrastructure/ansible') {                
+                    sh 'chmod 600 ../panda.pem'
                     sh 'ansible-playbook -i ./inventory playbook.yml'
                 } 
             }
