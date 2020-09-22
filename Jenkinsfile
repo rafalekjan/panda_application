@@ -74,14 +74,10 @@ pipeline {
                 } 
             }
         }
-        stage('Cleanup') {
-            steps {
-                post { 
-                    always { 
-                        sh 'docker stop pandaapp'
-                        deleteDir()
-                    }
-                }
+        post { 
+            always { 
+                sh 'docker stop pandaapp'
+                deleteDir()
             }
         }
     }
